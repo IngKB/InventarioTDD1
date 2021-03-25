@@ -10,14 +10,11 @@ namespace Inventario
 
         public decimal Precio_venta { get; set; }
 
-        public string idProd { get; set; }
+        public List<DetalleVenta> items { get; set; }
 
-        public int Cantidad { get; set; }
-
-        public Venta(string idProd, int cantidad)
+        public Venta(List<DetalleVenta> productos)
         {
-            this.idProd = idProd;
-            Cantidad = cantidad;
+            this.items = productos;
         }
     }
 }

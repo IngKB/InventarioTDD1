@@ -13,14 +13,25 @@ namespace Inventario
             Ventas = new List<Venta>();
         }
 
-        public string RegistrarVenta(Venta venta, InventarioProductos inv)
+        public void RegistrarVenta(Venta venta, InventarioProductos inv)
         {
-            var respuesta = inv.RegistrarSalida(venta.idProd,venta.Cantidad);
-            if (respuesta.Contains("Nueva"))
+            foreach (var item in venta.items)
             {
-                this.Ventas.Add(venta);
+                
+                if(item.prod is ProductoSimple)
+                {
+                   inv.RegistrarSalida(item.prod.Id, item.cantidad);
+                }
+
+                if(item.prod is ProductoPreparado)
+                {
+                    inv.RegistrarSalidaPreparado(item.prod as ProductoPreparado, item.cantidad);
+                }
+
+
             }
-            return respuesta;
+            
+            Ventas.Add(venta);
 
         }
 

@@ -4,11 +4,10 @@ using System.Text;
 
 namespace Inventario
 {
-    public class ProductoSimple 
+    public class ProductoSimple: Producto
     {
 
-        public string Id { get; set; }
-        public string Nombre { get; set; }
+
         public decimal Costo_indi { get; set; }
         public decimal Precio { get; set; }
         public int Cantidad { get; set; }

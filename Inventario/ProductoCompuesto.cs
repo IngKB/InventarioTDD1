@@ -4,13 +4,11 @@ using System.Text;
 
 namespace Inventario
 {
-    public abstract class ProductoCompuesto
+    public abstract class ProductoCompuesto:Producto
     {
-        public string Id { get; set; }
-        public string Nombre { get; set;}
+
         public decimal Precio_comp { get; set; }
         public decimal Costo_comp { get; set; }
-
 
     }
 }
