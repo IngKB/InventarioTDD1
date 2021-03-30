@@ -6,18 +6,14 @@ namespace Inventario
 {
     public class ProductoSimple: Producto
     {
+        
 
+        private decimal Precio { get;  set; }
+        public int Cantidad { get; private set; }
+        private string Tipo { get; set; }
 
-        public decimal Costo_indi { get; set; }
-        public decimal Precio { get; set; }
-        public int Cantidad { get; set; }
-        public string Tipo { get; set; }
-
-        public ProductoSimple(string id, string nombre, decimal costo_indi, decimal precio, string tipo)
+        public ProductoSimple(string id, string nombre, decimal costo, decimal precio, string tipo) : base(id, nombre, costo)
         {
-            Id = id;
-            Nombre = nombre;
-            Costo_indi = costo_indi;
             Precio = precio;
             Cantidad = 0;
             Tipo = tipo;
@@ -28,19 +24,24 @@ namespace Inventario
             if (cantidad >= 0)
             {
                 this.Cantidad += cantidad;
-                return $"Nueva cantidad: {Cantidad}";
+                return $"{Nombre} Nueva cantidad: {Cantidad}";
             }
             return "Entrada menor o igual a 0";
         }
 
-        public string RegistrarSalida(int cantidad)
+        public override string RegistrarSalida(int cantidad)
         {
             if (cantidad >= 0)
             {
                 this.Cantidad -= cantidad;
-                return $"Nueva cantidad: {Cantidad}";
+                return $"Nueva salida: {Nombre}, cantidad:{cantidad}, costo:{getCosto()}, precio:{Precio}";
             }
             return "Salida menor o igual a 0";
+        }
+
+        public override decimal getCosto()
+        {
+            return Costo;
         }
     }
 }

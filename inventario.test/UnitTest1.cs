@@ -21,12 +21,10 @@ namespace inventario.test
         public void EntradaProductoMenorACero()
         {
             //Arrange
-            InventarioProductos inventario = new InventarioProductos();
             ProductoSimple salchicha = new ProductoSimple("001","Salchicha",1000,0,"Preparacion");
-            inventario.RegistrarProducto(salchicha);
 
             //Act
-            var respuesta = inventario.RegistrarEntrada(salchicha.Id, -1);
+            var respuesta = salchicha.RegistrarEntrada(-1);
 
             //Assert
             Assert.AreEqual("Entrada menor o igual a 0",respuesta);
@@ -40,15 +38,13 @@ namespace inventario.test
         [Test]
         public void EntradaDebeAumentarCantidad()
         {
-            InventarioProductos inventario = new InventarioProductos();
             ProductoSimple salchicha = new ProductoSimple("001", "Salchicha", 1000, 0, "Preparacion");
-            inventario.RegistrarProducto(salchicha);
 
             //Act
-            var respuesta = inventario.RegistrarEntrada(salchicha.Id, 10);
+            var respuesta = salchicha.RegistrarEntrada(10);
 
             //Assert
-            Assert.AreEqual("Nueva cantidad: 10", respuesta);
+            Assert.AreEqual("Salchicha Nueva cantidad: 10", respuesta);
         }
 
         /*
@@ -61,15 +57,10 @@ namespace inventario.test
         public void SalidaMenorACero()
         {
             //Arrange
-            InventarioProductos inventario = new InventarioProductos();
             ProductoSimple cocacola = new ProductoSimple("002", "CocaCola", 1000, 3000, "Venta");
-            inventario.RegistrarProducto(cocacola);
-            inventario.RegistrarEntrada(cocacola.Id, 10);
-
-      
 
             //Act
-            var respuesta = inventario.RegistrarSalida(cocacola.Id, -1);
+            var respuesta = cocacola.RegistrarSalida(-1);
 
             //Assert
             Assert.AreEqual("Salida menor o igual a 0", respuesta);
@@ -84,55 +75,39 @@ namespace inventario.test
         public void SalidaSencillaDebeDisminuirCantidad()
         {
             //Arrange
-            InventarioProductos inventario = new InventarioProductos();
             ProductoSimple cocacola = new ProductoSimple("002", "CocaCola", 1000, 3000, "Venta");
-            inventario.RegistrarProducto(cocacola);
-            inventario.RegistrarEntrada(cocacola.Id, 10);
-
             //Act
-            var respuesta = inventario.RegistrarSalida(cocacola.Id, 6);
+            cocacola.RegistrarEntrada(10);
+            var respuesta = cocacola.RegistrarSalida(6);
             //Assert
-            Assert.AreEqual("Nueva cantidad: 4", respuesta);
+            Assert.AreEqual("Nueva salida: CocaCola, cantidad:6, costo:1000, precio:3000", respuesta);
         }
 
+        /*
+        DADO que se ha registrado un producto compuesto
+        CUANDO se registre una salida
+        ENTONCES el sistema debe disminuir la cantidad existente de los productos que lo componen
+        */
         [Test]
         public void SalidaCompuestaDebeDisminuirCantidad()
         {
-            //Arrange
-            InventarioProductos inventario = new InventarioProductos();
             ProductoSimple salchicha = new ProductoSimple("001", "Salchicha", 1000, 0, "Preparacion");
-            ProductoSimple pan = new ProductoSimple("003", "Pan", 200, 0, "Preparacion");
+            ProductoSimple pan = new ProductoSimple("002", "Pan", 500, 0, "Preparacion");
 
-            inventario.RegistrarProducto(salchicha);
-            inventario.RegistrarProducto(pan);
+            salchicha.RegistrarEntrada(10);
+            pan.RegistrarEntrada(10);
+            List<Producto> ingredientes = new List<Producto>() { salchicha, pan };
 
-            inventario.RegistrarEntrada(pan.Id, 10);
-            inventario.RegistrarEntrada(salchicha.Id, 10);
-
-            ProductoPreparado perroCaliente = new ProductoPreparado("005","Perro",4000,new List<ProductoSimple>() { 
-                salchicha,pan
-                }
-            );
-
-            RegistroVentas ventas = new RegistroVentas();
-
-            List<DetalleVenta> items = new List<DetalleVenta>()
-            {
-                new DetalleVenta(perroCaliente,1)
-            };
-
+            Producto perroCaliente = new ProductoCompuesto("003", "PerroCaliente",5000, ingredientes);
+            
             //Act
-            ventas.RegistrarVenta(new Venta(items), inventario);
+            var respuesta = perroCaliente.RegistrarSalida(2);
 
 
             //Assert
-            int cantSalchicha = inventario.BuscarProducto(salchicha.Id).Cantidad;
-            int canPan = inventario.BuscarProducto(pan.Id).Cantidad;
+            Assert.AreEqual("Nueva salida: PerroCaliente, cantidad:2, costo:1500, precio:5000", respuesta);
 
-            if(cantSalchicha==9 && canPan == 9)
-            {
-                Assert.Pass();
-            }
         }
+
     }
 }
