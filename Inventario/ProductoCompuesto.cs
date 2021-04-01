@@ -7,13 +7,11 @@ namespace Inventario
     public class ProductoCompuesto:Producto
     {
         
-        public decimal Precio { get; set; }
         private List<Producto> Productos { get; set; }
 
 
-        public ProductoCompuesto(string id, string nombre, decimal precio_comp, List<Producto> productos) : base(id, nombre, 0)
+        public ProductoCompuesto(string id, string nombre, decimal precio, List<Producto> productos) : base(id, nombre, 0, precio)
         {
-            Precio = precio_comp;
             Productos = productos;
             getCosto();
         }

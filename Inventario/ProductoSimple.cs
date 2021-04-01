@@ -8,13 +8,11 @@ namespace Inventario
     {
         
 
-        private decimal Precio { get;  set; }
         public int Cantidad { get; private set; }
         private string Tipo { get; set; }
 
-        public ProductoSimple(string id, string nombre, decimal costo, decimal precio, string tipo) : base(id, nombre, costo)
+        public ProductoSimple(string id, string nombre, decimal costo, decimal precio, string tipo) : base(id, nombre, costo, precio)
         {
-            Precio = precio;
             Cantidad = 0;
             Tipo = tipo;
         }
